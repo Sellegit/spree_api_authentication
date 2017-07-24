@@ -4,6 +4,7 @@ Spree::Core::Engine.add_routes do
     namespace :v1 do
       post 'auth/token', :to => 'auth#token'
       post 'auth/facebook', :to => 'auth#facebook'
+      post 'auth/sign_up', :to => 'auth#sign_up'
     end
   end
 end

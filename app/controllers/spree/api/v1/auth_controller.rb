@@ -7,9 +7,19 @@ module Spree
         skip_before_action :load_user_roles
         skip_before_action :authorize_for_order
 
+        def sign_up
+          authorize! :create, Spree.user_class
+          @user = Spree.user_class.new(user_params)
+          if @user.save
+            respond_with(@user, status: 201, default_template: 'spree/api/v1/users/show')
+          else
+            invalid_resource!(@user)
+          end
+        end
+
         def token
-          if @user = Spree.user_class.find_for_database_authentication(login: params[:email])
-            if @user.valid_password? params[:password]
+          if @user = Spree.user_class.find_for_database_authentication(login: user_params[:email])
+            if @user.valid_password? user_params[:password]
 
               @user.generate_spree_api_key! unless @user.spree_api_key
               # render 'spree/api/v1/auth/token' 
@@ -77,6 +87,11 @@ module Spree
               }, status: 422
             end
           end
+        end
+        def user_params
+          params.require(:user).permit(permitted_user_attributes |
+                                         [bill_address_attributes: permitted_address_attributes,
+                                          ship_address_attributes: permitted_address_attributes])
         end
       end
     end
