@@ -1,5 +1,5 @@
 require 'spree_core'
 require 'spree_api'
-require 'Koala'
+require 'koala'
 require 'spree_api_authentication/engine'
 require 'spree_api_authentication/version'
