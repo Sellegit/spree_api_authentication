@@ -8,7 +8,6 @@ module Spree
         skip_before_action :authorize_for_order
 
         def sign_up
-          authorize! :create, Spree.user_class
           @user = Spree.user_class.new(user_params)
           @user.generate_spree_api_key! unless @user.spree_api_key
           if @user.save
